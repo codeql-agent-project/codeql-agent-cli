@@ -1,0 +1,10 @@
+{
+    "name": "codeql-agent-agent",
+    "client_working_dir": "$PWD",
+    "docker_working_dir": "/opt/src",
+    "client_results_dir": "$PWD/codeql-agent-results",
+    "docker_results_dir": "/opt/results",
+    "container_name": "doublevkay/codeql-agent-dev",
+    "telegram_api": "",
+    "telegram_groupid": ""
+}
