@@ -32,7 +32,7 @@ class CodeQLDocker:
                                                 name=self.conf.get("name"), \
                                                 volumes=_volumes, \
                                                 remove=True)
-            self.clog.debug("[CodeQLDocker]:run - Container id: {}". format(container_id))
+            # self.clog.debug("[CodeQLDocker]:run - Container id: {}". format(container_id))
         except Exception as ex:
             self.clog.critical("[CodeQLDocker]:run - {}".format(ex))
         
