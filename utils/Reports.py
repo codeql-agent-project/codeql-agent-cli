@@ -25,7 +25,7 @@ class Report:
             vulnerability = "\t\t{}{}{}\n".format(self.bold, vul.get("message"), self.reset)
             vulnerability += "[*] Message: {}\n".format(vul.get("message"))
             vulnerability += "[*] Description: {}\n".format(vul.get("description"))
-            if(vul.get("severity") == "High" or vul.get("severity" == "Critical")):
+            if(vul.get("severity") == "High" or vul.get("severity") == "Critical"):
                 vulnerability += "[*] Severity: {}{}{}\n".format(self.red, vul.get("severity"), self.reset)
             elif(vul.get("severity") == "Medium"):
                 vulnerability += "[*] Severity: {}{}{}\n".format(self.yellow, vul.get("severity"), self.reset)
