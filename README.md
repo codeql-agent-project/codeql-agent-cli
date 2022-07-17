@@ -4,8 +4,8 @@ A quick way to run software code audit
 # To-do
 - [x] Export report to console
 - [x] Support full option like [docker](https://github.com/codeql-agent-project/codeql-agent-docker)
-- [] Automate installation
-- [] Support for Windows (Automation installation and run) 
+- [ ] Automate installation
+- [ ] Support for Windows (Automation installation and run) 
 
 
 # Requirement
