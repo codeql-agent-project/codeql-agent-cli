@@ -36,8 +36,8 @@ def cparser():
     parser.add_argument("--userid", help="Set the owner of the results folder to <id>.")
     parser.add_argument("--groupid", help="Set the group owner of the results folder to <group_id>.")
     parser.add_argument("--threads", help="Use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.")
-    parser.add_argument("--overwrite_flag", help="Enable/disable overwrite database when database path exists and not an empty directory. This flag is useful for forcibly rebuilding the database.")
-    parser.add_argument("--save_cache_flag", help="Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time.")
+    parser.add_argument("--overwrite_flag", nargs='?', type=str, const="--overwrite", help="Value is --overwrite. Enable/disable overwrite database when database path exists and not an empty directory. This flag is useful for forcibly rebuilding the database.")
+    parser.add_argument("--save_cache_flag", nargs='?', type=str, const="--save-cache", help="Value is --save-cache. Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time.")
     parser.add_argument("--java_version", help="Set the Java version. The default Java version is Java 11. It must be 8 or 11. Ex: --java_version 8.")
   
     return parser.parse_args()
@@ -47,7 +47,7 @@ def main(cparser):
         clog.critical("--sourcecode parameter is reqiured!")
         exit(0)
 
-    handler = CodeQLDocker(clog=clog, language=cparser.language, scpath=cparser.sourcecode)
+    handler = CodeQLDocker(clog=clog, cparser=cparser)
     handler.run()
     rp = Report(clog, cparser.sourcecode)
     rs = rp.parser()

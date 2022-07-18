@@ -16,8 +16,12 @@ class Report:
         self.reset = "\x1b[0m"
 
     def parser(self):
-        with open(self.report_file_path, "r") as f:
-            raw = json.loads(f.read().strip())
+        try:
+            with open(self.report_file_path, "r") as f:
+                raw = json.loads(f.read().strip())
+        except Exception as e:
+            self.clog.critical("[Reports]:parser - {}".format(e))
+            exit(0)
 
         vulnerabilities = raw.get("vulnerabilities")
         vuls = list()
