@@ -47,7 +47,13 @@ class Report:
             vulnerability += "[*] Location (file:startline:endline): {}:{}:{}\n".format(target.get("file"), target.get("start_line"), target.get("end_line"))
             ident = vul.get("identifiers")[0]
             vulnerability += "[*] Identifiers: {}\n".format(ident.get("name"))
-            vuls.append(vulnerability)
             print(vulnerability)
-
+            vulnerability = vulnerability.replace(self.red, "")
+            vulnerability = vulnerability.replace(self.yellow, "") 
+            vulnerability = vulnerability.replace(self.reset, "")               
+            vuls.append(vulnerability)
+            
+        with open("result.txt", "w") as f:
+            f.write('\n\n'.join(vuls))
+        
         return vuls
