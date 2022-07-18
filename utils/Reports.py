@@ -50,7 +50,8 @@ class Report:
             print(vulnerability)
             vulnerability = vulnerability.replace(self.red, "")
             vulnerability = vulnerability.replace(self.yellow, "") 
-            vulnerability = vulnerability.replace(self.reset, "")               
+            vulnerability = vulnerability.replace(self.reset, "")  
+            vulnerability = vulnerability.replace(self.bold, "")             
             vuls.append(vulnerability)
             
         with open("result.txt", "w") as f:
