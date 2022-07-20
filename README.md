@@ -56,6 +56,23 @@ You can set environment variables to use the following supported options:
 # Screenshot
 ![Demo Image](https://github.com/codeql-agent-project/codeql-agent-cli/blob/main/resources/codeql-agent-cli.PNG)
 
+## Support
+
+You can open an issue on the [GitHub repo](https://github.com/codeql-agent-project/codeql-agent-cli).
+
+## Contributing
+
+Contributions are always welcome! Just simply create a pull request.
+
+## Contributors
+<a href="https://github.com/codeql-agent-project/codeql-agent-cli/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=codeql-agent-project/codeql-agent-cli" />
+</a>
+
+## Release Notes
+
+[See details](https://github.com/codeql-agent-project/codeql-agent-cli/releases)
+
 ## License
 
 CodeQL Agent is use CodeQL CLI as the core engine. Please follow the [GitHub CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) and take it as your own responsibility.
