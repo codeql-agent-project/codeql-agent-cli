@@ -6,7 +6,7 @@ const figlet = require('figlet');
 const path = require('path');
 const program = require('commander');
 const config = require('./config.json');
-const { createDbAction, scanAction } = require('./index.js');
+const { scan } = require('./index.js');
 
 clear();
 console.log(
@@ -41,6 +41,6 @@ program.command('scan')
     .option('--create-db-only', 'only create CodeQL database, do not scan.')
     .option('--use-docker', 'use docker to isolated run CodeQL.')
     .option('-v, --verbose', 'verbose output')
-    .action(scanAction);
+    .action(scan);
 
 program.parse();

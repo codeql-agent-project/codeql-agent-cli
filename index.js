@@ -5,7 +5,7 @@ const config = require('./config');
 const path = require('path');
 
 module.exports = {
-    scanAction
+    scan
 }
 
 async function scanAction(sourceTarget, options) {
