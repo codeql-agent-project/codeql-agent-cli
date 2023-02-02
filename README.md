@@ -16,11 +16,12 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 
 ## Features
 
-- **Automated CodeQL scans:** The CodeQL Agent runs queries on your codebase and provides results in a clear and actionable format, using the CodeQL engine to perform code scanning or source auditing.
+- **Scan remote target**: You can scan a remote target, such as a GitHub repository, using CodeQL Agent CLI.
+- **Automated CodeQL scans:** The CodeQL Agent runs queries on your codebase and provides results in a clear and actionable format, using the CodeQL engine to perform code scanning.
 
 - **User-friendly interface:** The tool is designed with a simple and intuitive interface that makes it accessible to developers of all skill levels.
 
-- **Docker support:** You can execute CodeQL Agent on a Docker container - which has prepackaged and precompiled Codeql for running CodeQL.
+- **Docker support:** You can execute CodeQL Agent on a Docker container - which has prepackaged and precompiled CodeQL for running code scanning.
 
 ## Requirements
 
