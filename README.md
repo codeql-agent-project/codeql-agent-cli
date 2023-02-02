@@ -20,8 +20,8 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 
 ## Requirements
 
-- For normal use, you need to install the CodeQL CLI. For more information, see [Installing the CodeQL CLI](https://codeql.github.com/).
-- For Docker support, you need to install Docker and are not required to install CodeQL CLI. For more information, see [Install Docker](https://docs.docker.com/get-docker/).
+- For normal use, you need to install the [CodeQL CLI](https://codeql.github.com/).
+- For Docker support, you need to install [Docker](https://docs.docker.com/get-docker/) and are not required to install CodeQL CLI.
 
 ## Install CodeQL Agent CLI
 
