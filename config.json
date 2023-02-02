@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "codeql-agent-docker-image": "doublevkay/codeql-agent:latest",
+    "supportedLanguages": [
+        "go",
+        "java",
+        "cpp",
+        "csharp",
+        "python",
+        "javascript",
+        "ruby"
+    ],
+    "supportedJavaVersions": [
+        "8",
+        "11"
+    ],
+    "default": {
+        "queries": {
+            "go": "go-security-extended.qls",
+            "java": "java-security-extended.qls",
+            "cpp": "cpp-security-extended.qls",
+            "csharp": "csharp-security-extended.qls",
+            "python": "python-security-extended.qls",
+            "javascript": "javascript-security-extended.qls",
+            "ruby": "ruby-security-extended.qls"
+        },
+        "format": "sarif-latest"
+    }
+}

@@ -1,79 +1,100 @@
-[![Actions Status](https://github.com/docker/compose-cli/workflows/Continuous%20integration/badge.svg)](https://hub.docker.com/repository/docker/doublevkay/codeql-agent-dev)[![Docker Pulls](https://badgen.net/docker/pulls/doublevkay/codeql-agent-dev?icon=docker&label=pulls)](https://hub.docker.com/repository/docker/doublevkay/codeql-agent-dev)[![Docker Image Size](https://badgen.net/docker/size/doublevkay/codeql-agent-dev?icon=docker&label=image%20size)](https://hub.docker.com/repository/docker/doublevkay/codeql-agent-dev)![Github stars](https://badgen.net/github/stars/vovikhangcdv/codeql-agent?icon=github&label=stars)![Python](https://upload.wikimedia.org/wikipedia/commons/a/a5/Blue_Python_3.8_Shield_Badge.svg)
+# CodeQL Agent CLI
 
-CodeQL Agent is a project aimed at automating the use of CodeQL. The project helps create database and execute CodeQL analysis. CodeQL Agent is a Docker image. It is designed to be compatible with [SAST Gitlab CI/CD](https://docs.gitlab.com/ee/user/application_security/sast/).
+CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semantic code analysis engine, to execute code scanning. It makes the process of finding security vulnerabilities in code simple and efficient.
 
-CodeQL Agent for Docker is also the base image of [CodeQL Agent for Visual Studio Code](https://github.com/vovikhangcdv/codeql-agent-extension) - an extension for [Visual Studio Code](https://code.visualstudio.com/) that simplifies CodeQL usage and executes code scanning automatically.
+## Table of Contents
+- [CodeQL Agent CLI](#codeql-agent-cli)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Install CodeQL Agent CLI](#install-codeql-agent-cli)
+  - [Getting Started](#getting-started)
+  - [Usage](#usage)
+  - [Using CodeQL Agent on VSCode](#using-codeql-agent-on-vscode)
+  - [Contributors](#contributors)
+  - [License](#license)
 
-The CodeQL Agent image is released on **Docker Hub** under the name [`doublevkay/codeql-agent-dev`](https://hub.docker.com/repository/docker/doublevkay/codeql-agent-dev). You can use it without building locally.
+## Features
 
-# codeql-agent-cli
-A quick way to run software code audit
+- **Automated CodeQL scans:** The CodeQL Agent runs queries on your codebase and provides results in a clear and actionable format, using the CodeQL engine to perform code scanning or source auditing.
 
-# To-do
-- [x] Export report to console
-- [x] Support full option like [docker](https://github.com/codeql-agent-project/codeql-agent-docker)
-- [ ] Automate installation
-- [ ] Support for Windows (Automation installation and run) 
+- **User-friendly interface:** The tool is designed with a simple and intuitive interface that makes it accessible to developers of all skill levels.
 
+- **Docker support:** You can execute CodeQL Agent on a Docker container - which has prepackaged and precompiled Codeql for running CodeQL.
 
-# Requirement
-- Docker installed
-- Python3.8 or above
+## Requirements
 
+- For normal use, you need to install the CodeQL CLI. For more information, see [Installing the CodeQL CLI](https://codeql.github.com/).
+- For Docker support, you need to install Docker and are not required to install CodeQL CLI. For more information, see [Install Docker](https://docs.docker.com/get-docker/).
 
-# Quick usage
-## Linux
-1. Install docker on your machine
-2. Git clone this repo
-3. Install python requirement: `python3 -m pip install -r requirement.txt`
-4. Run quick command: `sudo python3 codeqlcli.py --sourcecode <full path to your source code>`
-5. Taste a coffee and enjoy the moment!
+## Install CodeQL Agent CLI
 
-For more information, just type:
+Install CodeQL Agent CLI from npm:
+
+```bash
+npm install -g codeql-agent-cli
 ```
-python3 codeqlcli.py -h
+
+## Getting Started
+
+1. Install CodeQL Agent CLI.
+
+```bash
+npm install -g codeql-agent-cli
 ```
 
-### Supported options
-You can set environment variables to use the following supported options:
-| Variable  | Description |
-| ------- | ----------- |
-`LANGUAGE`| Value `<language>`. Set project language to build database or execute SAST. The `<language>` must be: `python`, `javascript`, `cpp`, `csharp`, `java`, `go`, `typescript`, `c`.
-`USERID` | Value `<id>`. Set the owner of the results folder to `<id>`.
-`GROUPID` | Value `<group_id>`. Set the group owner of the results folder to `<group_id>`.
-`THREADS` | Value `<number_of_threads>`. Use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.
-`OVERWRITE_FLAG` | Value `--overwrite`. Enable/disable overwrite database when database path exists and not an empty directory. This flag is useful for forcibly rebuilding the database.
-`QS`| Value `<queries-suite>`. Specify a list of queries to run over your database. The default value is `<language>-security-extended.qls`. For more details, please see [Analyzing databases with the CodeQL CLI](https://codeql.github.com/docs/codeql-cli/analyzing-databases-with-the-codeql-cli/#running-codeql-database-analyze).
-`SAVE_CACHE_FLAG` | Value `--save-cache`. Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time. 
-`ACTION` | Value `create-database-only`. Creating CodeQL database only without executing CodeQL analysis.
-`COMMAND` | Value `<command>`. The variable used when you create a CodeQL database for one or more compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder. 
-`JAVA_VERSION` | Value `<java_version>`. Set the Java version. The default Java version is Java 11. It must be `8` or `11`.
------
+2. Scan your codebase.
 
-***Disclaimer:** CodeQL Agent directly forwards these options to the command arguments while running the container. Please take it as your security responsibility.*
+```bash
+codeql-agent scan
+```
 
+## Usage
 
-# Screenshot
-![Demo Image](https://github.com/codeql-agent-project/codeql-agent-cli/blob/main/resources/codeql-agent-cli.PNG)
+```bash
+codeql-agent -h
+```
 
-## Support
+This will display help for the tool. Here are all the switches it supports.
 
-You can open an issue on the [GitHub repo](https://github.com/codeql-agent-project/codeql-agent-cli).
+```console
+Usage: codeql-agent scan [options] <target>
 
-## Contributing
+scan a source code folder or remote repository (e.g. GitHub repository)
 
-Contributions are always welcome! Just simply create a pull request.
+Arguments:
+  target                      source code folder or remote repository.
+  
+  Examples:
+        codeql-agent-cli src/sammple 
+        codeql-agent-cli scan src/sammple --use-docker
+        codeql-agent-cli scan https://github.com/OWASP/NodeGoat
+
+Options:
+  -l, --language <language>   language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.
+  -o, --output <output>       output folder. Default: <target>-codeql-results
+  -c, --command <command>     command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands
+                              needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder
+  -t, --threads <number>      number of threads to use. Pass 0 to use one threads per core on the machine. Default: 1 (default: 1)
+  --query <query>             CodeQL query to run. Default: <language>-security-extended.qls
+  --format <format>           output format. Default: sarif-latest (default: "sarif-latest")
+  --overwrite                 overwrite existing database.
+  --no-download               do not download missing queries before analyzing.
+  --remove-remote-repository  remove the remote repository after cloning.
+  --db-output <dbOutput>      database folder path.
+  --remove-database           remove the CodeQL database after scanning.
+  --create-db-only            only create CodeQL database, do not scan.
+  --use-docker                use docker to isolated run CodeQL.
+  -v, --verbose               verbose output
+  -h, --help                  display help for command
+```
+
+## Using CodeQL Agent on VSCode
+
+If you want to use CodeQL Agent on VSCode, you can install the [CodeQL Agent extension](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent) from the VSCode Marketplace.
 
 ## Contributors
-<a href="https://github.com/codeql-agent-project/codeql-agent-cli/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=codeql-agent-project/codeql-agent-cli" />
-</a>
-
-## Release Notes
-
-[See details](https://github.com/codeql-agent-project/codeql-agent-cli/releases)
 
 ## License
 
-CodeQL Agent is use CodeQL CLI as the core engine. Please follow the [GitHub CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) and take it as your own responsibility.
-
+CodeQL Agent uses CodeQL CLI as the core engine. Please follow the [GitHub CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) and take it as your own responsibility.
