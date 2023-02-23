@@ -1,6 +1,15 @@
 const CONFIG = require('./config.json');
 
-// Check if a command is installed on the system, else throw error
+module.exports = {
+    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, parseSarif
+}
+
+/**
+ * @description Check if a command exist in the PATH
+ * @param {string} command - The command to check
+ * @param {Object} logger - A logger instance
+ * @returns {boolean} true if command exist, throw error if command does not exist
+ */
 async function isCommandExist(command, logger) {
     const which = require('which');
     try {
@@ -12,7 +21,13 @@ async function isCommandExist(command, logger) {
         process.exit(1);
     }
 }
-// Check if a folder exists, else throw error
+
+/**
+ * @desc Checks if folder exist in the local file system
+ * @param {string} folder - Folder path
+ * @param {object} logger - A logger instance
+ * @return throw error if folder does not exist
+ */
 async function isFolderExist(folder, logger) {
     const fs = require('fs');
     if (!fs.existsSync(folder) || !fs.lstatSync(folder).isDirectory()) {
@@ -20,34 +35,48 @@ async function isFolderExist(folder, logger) {
         process.exit(1);
     }
 }
-// Check if language is in supportedLanguages, else throw error
+
+/**
+ * @desc Checks if language is in supported languages
+ * @param {string[]} supportedLanguages - Supported languages
+ * @param {string} language - Language to check
+ * @param {object} logger - A logger instance
+ * @return - throw error if language is not supported
+*/
 async function isSupportedLanguage(supportedLanguages, language, logger) {
     if (!supportedLanguages.includes(language)) {
         logger.error(`Language ${language} is not supported. Please provide a valid language and try again. Supported languages are: ${supportedLanguages.join(', ').trim()}.`);
         process.exit(1);
     }
 }
-// Create if not exist
+
+/**
+ * @desc create a folder if it does not exist
+ * @param {string} folder - Folder path
+ * @param {object} logger - A logger instance
+ * @return - throw error if folder does not exist
+*/
 async function createIfNotExist(folder, logger) {
     const fs = require('fs');
     if (!fs.existsSync(folder)) {
         fs.mkdirSync(folder, { recursive: true });
     }
 }
-// // Check if javaVersion is in supported Java versions, else throw error
-// async function isSupportedJavaVersion(supportedJavaVersions, javaVersion, logger) {
-//     if (!supportedJavaVersions?.includes(javaVersion)) {
-//         logger.error(`Java version ${javaVersion} is not supported. Please provide a valid java version and try again. Supported java versions are: ${supportedJavaVersions.join(', ').trim()}.`);
-//         process.exit(1);
-//     }
-// }
-// Execute a command
+
+/**
+ * @desc execute a command
+ * @param {string} commandPath - Command path
+ * @param {string[]} commandArgs - Command arguments
+ * @param {string} description - Command description
+ * @param {object} logger - A logger instance
+ * @return - program exit if command failed
+*/
 async function executeCommand(commandPath, commandArgs, description, logger) {
     const child_process = require('child_process');
     const args = commandArgs;
     const argsString = args.join(' ');
     try {
-        void logger.info(`[${description}]: ${commandPath} ${argsString}...`);
+        void logger.verbose(`[${description}]: ${commandPath} ${argsString}...`);
         const result = child_process.spawn(commandPath, args, { shell: true });
         result.stdout?.on('data', function (data) {
             logger.verbose(`${description}: ${data.toString().trim()}`);
@@ -77,7 +106,14 @@ async function executeCommand(commandPath, commandArgs, description, logger) {
         process.exit(1);
     }
 }
-// Setup arguments for CodeQL command. return args and databasePath
+
+/**
+ * @desc setup create database command arguments
+ * @param {string} sourceFolderPath - Source folder path
+ * @param {object} options - Command options
+ * @param {object} logger - A logger instance
+ * @return - command arguments
+*/
 async function setupCreateDatabaseCommandArgs(sourceFolderPath, options, logger) {
     const fs = require('fs');
     sourceFolderPath = fs.realpathSync(sourceFolderPath);
@@ -95,7 +131,13 @@ async function setupCreateDatabaseCommandArgs(sourceFolderPath, options, logger)
     args.push('--', databasePath);
     return { args, databasePath };
 }
-// Get programming languages of a folder, filter by supportedLanguages
+
+/**
+ * @desc get source languages from source folder
+ * @param {string} sourceFolderPath - Source folder path
+ * @param {object} logger - A logger instance
+ * @return {string[]} - source languages
+*/
 async function getSourceLanguages(sourceFolderPath, logger) {
     const linguist = require('linguist-js');
     const languages = Object.keys((await linguist(sourceFolderPath)).languages.results);
@@ -104,6 +146,12 @@ async function getSourceLanguages(sourceFolderPath, logger) {
     return validLanguages;
 }
 
+/**
+ * @desc get database languages from database folder
+ * @param {string} databasePath - Database folder path
+ * @param {object} logger - A logger instance
+ * @return {string[]} - database languages
+*/
 async function getDatabaseLanguages(databasePath, logger) {
     const fs = require('fs');
     const path = require('path');
@@ -112,6 +160,11 @@ async function getDatabaseLanguages(databasePath, logger) {
     return languages;
 }
 
+/**
+ * @desc convert language indentifier to coresponding language
+ * @param {string} language - Language indentifier
+ * @return {string} - supported language
+*/
 function convertLanguageIndentifier(language) {
     language = normolizeString(language)
     switch (language) {
@@ -125,7 +178,14 @@ function convertLanguageIndentifier(language) {
             return language;
     }
 }
-// Create CodeQL database
+
+/**
+ * @desc create CodeQL database from source folder by given options
+ * @param {string} sourceFolderPath - Source folder path
+ * @param {object} options - Command options
+ * @param {object} logger - A logger instance
+ * @return {object} - { exitCode, databasePath}
+*/
 async function createCodeQLDatabase(sourceFolderPath, options, logger) {
     if (options.userDocker) {
         await isCommandExist('docker', logger);
@@ -143,6 +203,13 @@ async function createCodeQLDatabase(sourceFolderPath, options, logger) {
     }
 }
 
+/**
+ * @desc setup scan command arguments
+ * @param {string} databaseFolderPath - Database folder path
+ * @param {object} options - Command options
+ * @param {object} logger - A logger instance
+ * @return {object} - command arguments
+*/
 async function setupScanCommandArgs(databaseFolderPath, options, logger) {
     const fs = require('fs');
     const path = require('path');
@@ -162,19 +229,32 @@ async function setupScanCommandArgs(databaseFolderPath, options, logger) {
 
     return { args, outputPath };
 }
-// async function scanDatabase(databasePath, options, logger) {
 
-// }
+/**
+ * @desc replace all white space and convert to lower case
+ * @param {string} str - String to be normalized
+ * @return {string} - normalized string
+*/
 function normolizeString(str) {
     return str.replace(/\s/g, '').toLowerCase();
 }
 
+/**
+ * @desc check if the given repository is a remote repository
+ * @param {string} repository - Repository URL
+ * @return {boolean} - true if the given repository is a remote repository
+*/
 function isRemoteRepository(repository) {
     const GIT_URL_PATTERN = /^((https?|ssh|git|ftps?):\/\/)?(([^\/@]+)@)?([^\/:]+)[\/:]([^\/:]+)\/(.+)(.git)?\/?$/gm;
     return GIT_URL_PATTERN.test(repository);
 }
 
-// Clone a remote repository
+/**
+ * @desc clone a remote repository
+ * @param {string} target - Repository URL
+ * @param {object} logger - A logger instance
+ * @return {string} - cloned repository relative path
+*/
 async function cloneRemoteRepository(target, logger) {
     await isCommandExist('git', logger);
     const GIT_URL_PATTERN = /^((https?|ssh|git|ftps?):\/\/)?(([^\/@]+)@)?([^\/:]+)[\/:]([^\/:]+)\/(.+)(.git)?\/?$/gm;
@@ -185,6 +265,12 @@ async function cloneRemoteRepository(target, logger) {
     return `${owner}@${repositoryName}`
 }
 
+/**
+ * @desc remove a folder
+ * @param {string} folderPath - Folder path
+ * @param {object} logger - A logger instance
+ * @return {void}
+*/
 async function removeFolder(folderPath, logger) {
     const fs = require('fs');
     try {
@@ -194,14 +280,55 @@ async function removeFolder(folderPath, logger) {
         logger.warning(`${error.message}`);
     }
 }
-async function createDb(sourceTarget, options) {
-    var returnExitCode, returnDatabasePath, returnSourceFolderPath;
-    if (options.verbose) { logger.setLevel('verbose') }
-    // utils.isRemoteRepository(sourceFolder) ? sourceFolderPath = await utils.cloneRemoteRepository(sourceFolder) : sourceFolderPath = sourceFolder;
 
-    return { returnExitCode, returnDatabasePath }
+/**
+ * @desc get nested value of object by given path
+ * @param {object} obj - Object
+ * @param {[]string} paths - Paths
+ * @param {boolean} isRequired - true if the value is required
+ * @return {any} - value
+ */
+function getNestedValue(obj, paths, isRequired) {
+    if (obj === undefined) {
+        if (isRequired) {
+            throw new Error(`The value is required.`);
+        }
+        return undefined;
+    }
+    if (paths.length === 0) {
+        return obj;
+    }
+    const [head, ...tail] = paths;
+    return getNestedValue(obj[head], tail, isRequired);
 }
 
-module.exports = {
-    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, createDb
+/**
+ * @desc parse sarif file to array of alert: {id, title, level, severity, precision, location}
+ * @param {string} sarifPath - Sarif file path
+ * @param {object} logger - A logger instance
+ * @return {object[]} - array of alert
+*/
+async function parseSarif(sarifPath, logger) {
+    const fs = require('fs');
+    const sarif = JSON.parse(fs.readFileSync(sarifPath, 'utf8'));
+    const rules = getNestedValue(sarif, ['runs', 0, 'tool', 'driver', 'rules'], false);
+    const results = getNestedValue(sarif, ['runs', 0, 'results'], false);
+    const alerts = results.map(result => {
+        const rule = rules.find(rule => rule.id === result.ruleId);
+        const alert = {
+            id: getNestedValue(rule, ['id'], false),
+            title: getNestedValue(rule, ['shortDescription', 'text'], false),
+            level: getNestedValue(rule, ['defaultConfiguration', 'level'], false),
+            severity: getNestedValue(rule, ['properties', 'security-severity'], false),
+            precision: getNestedValue(rule, ['properties', 'precision'], false),
+        };
+        const uri = getNestedValue(result, ['locations', 0, 'physicalLocation', 'artifactLocation', 'uri'], false);
+        const startLine = getNestedValue(result, ['locations', 0, 'physicalLocation', 'region', 'startLine'], false);
+        const endLine = getNestedValue(result, ['locations', 0, 'physicalLocation', 'region', 'endLine'], false);
+        alert.location = uri;
+        if (startLine) alert.location += `#L${startLine}`;
+        if (endLine) alert.location += `-${endLine}`;
+        return alert;
+    });
+    return alerts;
 }

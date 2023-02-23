@@ -51,7 +51,13 @@ codeql-agent scan
 codeql-agent -h
 ```
 
-This will display help for the tool. Here are all the switches it supports.
+or for more details about command:
+
+```bash
+codeql-agent scan -h
+```
+
+This will display help for the tool. Here are all the switches of `scan` command supports.
 
 ```console
 Usage: codeql-agent scan [options] <target>

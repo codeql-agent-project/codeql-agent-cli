@@ -1,5 +1,4 @@
 {
-    "version": "2.0.0",
     "codeql-agent-docker-image": "doublevkay/codeql-agent:latest",
     "supportedLanguages": [
         "go",

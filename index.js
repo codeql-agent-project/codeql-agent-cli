@@ -5,13 +5,14 @@ const config = require('./config');
 const path = require('path');
 
 module.exports = {
-    scan
+    scan: scanAction
 }
 
 async function scanAction(sourceTarget, options) {
     if (options.verbose) { logger.setLevel('verbose') }
-    if (options.userDocker) {
+    if (options.useDocker) {
         await utils.isCommandExist('docker', logger);
+        logger.error('Docker is not supported yet.');
         return;
     }
     await utils.isCommandExist('codeql', logger);
@@ -55,11 +56,16 @@ async function scanAction(sourceTarget, options) {
         await utils.executeCommand('codeql', scanArgs, 'Scan CodeQL database', logger);
     }
     logger.info(`CodeQL scan results saved at ${outputFolderPath}.`)
+    const resultFiles = fs.readdirSync(outputFolderPath);
+    for (const resultFile of resultFiles) {
+        const alerts = await utils.parseSarif(path.resolve(outputFolderPath, resultFile), logger);
+        for (const alert of alerts) {
+            logger.error(`[${alert.id}][${alert.level}][precision:${alert.precision}][severity:${alert.severity}] ${alert.title}: ${alert.location}`);
+        }
+    }
     if (options.removeDatabase) {
         logger.info(`Removing database folder ${databasePath}`)
         await utils.removeFolder(databasePath, logger);
     }
     return outputFolderPath;
 }
-
-

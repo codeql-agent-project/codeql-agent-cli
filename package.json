@@ -1,13 +1,13 @@
 {
   "name": "codeql-agent",
-  "version": "2.0.0",
-  "description": "A CodeQL tool to automatically execute code scanning or create dabase.",
+  "version": "0.1.0",
+  "description": "A CodeQL tool to automatically execute code scanning.",
   "main": "index.js",
   "scripts": {
-    "start": "npx codeql-agent-cli"
+    "start": "npx codeql-agent"
   },
   "bin": {
-    "codeql-agent-cli": "cli.js"
+    "codeql-agent": "cli.js"
   },
   "repository": {
     "type": "git",
