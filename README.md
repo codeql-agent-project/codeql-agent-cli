@@ -1,5 +1,9 @@
 # CodeQL Agent CLI
 
+[![NPM version][npm-version-image]][npm-url]
+[![NPM downloads][npm-downloads-image]][npm-downloads-url]
+[![MIT License][license-image]][license-url]
+
 CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semantic code analysis engine, to execute code scanning. It makes the process of finding security vulnerabilities in code simple and efficient.
 
 - [CodeQL Agent CLI](#codeql-agent-cli)
@@ -97,6 +101,21 @@ If you want to use CodeQL Agent on VSCode, you can install the [CodeQL Agent ext
 
 ## Contributors
 
+<a href="https://github.com/codeql-agent-project/codeql-agent-cli/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=codeql-agent-project/codeql-agent-cli" />
+</a>
+
 ## License
 
-CodeQL Agent uses CodeQL CLI as the core engine. Please follow the [GitHub CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) and take it as your own responsibility.
+This tool is released by CodeQL Agent Project - a  non-profit organization from community and are not the official team of CodeQL, under the MIT License. For the full text of this, please consult our [LICENSE.md](LICENSE.md) file.
+
+Note that this license applies only to the tool in this repository, for more information on the license governing use of the CodeQL CLI that it uses, please consult the [GitHub CodeQL Terms and Conditions](https://securitylab.github.com/tools/codeql/license/). In particular, note that there are restrictions on how you may use the the CodeQL CLI on code that is not released under an OSI-approved open source software license.
+
+[npm-url]: https://npmjs.org/package/codeql-agent
+[npm-version-image]: https://img.shields.io/npm/v/codeql-agent.svg?style=flat
+
+[npm-downloads-image]: https://img.shields.io/npm/dm/codeql-agent.svg?style=flat
+[npm-downloads-url]: https://app.fossa.com/projects/git%2Bgithub.com%2Fcodeql-agent-project%2Fcodeql-agent?ref=badge_large
+
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]: LICENSE
