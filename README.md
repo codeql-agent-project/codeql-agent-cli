@@ -20,7 +20,7 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 
 - Automated CodeQL from detect language, create database and scan.
 - Scan remote target (e.g. GitHub repository) or local target (e.g. source code folder).
-- Support running on Docker which prepackaged and precompiled CodeQL for running code scanning.
+- Support running on Docker which prepackaged and precompiled CodeQL for running code scanning (*under development*).
 
 ## Requirements
 
@@ -32,7 +32,7 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 Install CodeQL Agent CLI from npm:
 
 ```bash
-npm install -g codeql-agent-cli
+npm install -g codeql-agent
 ```
 
 ## Getting Started
@@ -40,7 +40,7 @@ npm install -g codeql-agent-cli
 1. Install CodeQL Agent CLI.
 
 ```bash
-npm install -g codeql-agent-cli
+npm install -g codeql-agent
 ```
 
 2. Scan your codebase.
@@ -72,9 +72,9 @@ Arguments:
   target                      source code folder or remote repository.
   
   Examples:
-        codeql-agent-cli src/sammple 
-        codeql-agent-cli scan src/sammple --use-docker
-        codeql-agent-cli scan https://github.com/OWASP/NodeGoat
+        codeql-agent src/sammple 
+        codeql-agent scan src/sammple --use-docker
+        codeql-agent scan https://github.com/OWASP/NodeGoat
 
 Options:
   -l, --language <language>   language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.
