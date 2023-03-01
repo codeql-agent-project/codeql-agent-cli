@@ -1,7 +1,7 @@
 const CONFIG = require('./config.json');
 
 module.exports = {
-    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, parseSarif
+    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, parseSarif, castBugLevelToLogLevel
 }
 
 /**
@@ -220,7 +220,7 @@ async function setupScanCommandArgs(databaseFolderPath, options, logger) {
     args.push('database', 'analyze');
     args.push(`--format=${options.format ? options.format : CONFIG.default.format}`);
     args.push(`--output=${outputPath}`);
-    options.noDownload ? null : args.push(`--download`);
+    options.download ? args.push(`--download`) : null;
     options.threads ? args.push(`--threads=${options.threads}`) : null;
     options.verbose ? args.push(`--verbose`) : null;
 
@@ -331,4 +331,20 @@ async function parseSarif(sarifPath, logger) {
         return alert;
     });
     return alerts;
+}
+
+/**
+ * @desc cast bug level to log level
+ * @param {string} level - Bug level
+ * @return {string} - log level
+*/
+function castBugLevelToLogLevel(level) {
+    switch (level) {
+        case 'error':
+            return 'error';
+        case 'warning':
+            return 'warn';
+        default:
+            return 'error';
+    }
 }
