@@ -21,6 +21,7 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 - Automated CodeQL from detect language, create database and scan.
 - Scan remote target (e.g. GitHub repository) or local target (e.g. source code folder).
 - Support running on Docker which prepackaged and precompiled CodeQL for running code scanning (*under development*).
+- Send results to Discord webhook.
 
 ## Requirements
 
@@ -69,30 +70,32 @@ Usage: codeql-agent scan [options] <target>
 scan a source code folder or remote repository (e.g. GitHub repository)
 
 Arguments:
-  target                      source code folder or remote repository.
-  
+  target                          source code folder or remote repository.
+
   Examples:
-        codeql-agent src/sammple 
+        codeql-agent scan src/sammple
         codeql-agent scan src/sammple --use-docker
         codeql-agent scan https://github.com/OWASP/NodeGoat
 
 Options:
-  -l, --language <language>   language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.
-  -o, --output <output>       output folder. Default: <target>-codeql-results
-  -c, --command <command>     command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands
-                              needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder
-  -t, --threads <number>      number of threads to use. Pass 0 to use one threads per core on the machine. Default: 1 (default: 1)
-  --query <query>             CodeQL query to run. Default: <language>-security-extended.qls
-  --format <format>           output format. Default: sarif-latest (default: "sarif-latest")
-  --overwrite                 overwrite existing database.
-  --no-download               do not download missing queries before analyzing.
-  --remove-remote-repository  remove the remote repository after cloning.
-  --db-output <dbOutput>      database folder path.
-  --remove-database           remove the CodeQL database after scanning.
-  --create-db-only            only create CodeQL database, do not scan.
-  --use-docker                use docker to isolated run CodeQL.
-  -v, --verbose               verbose output
-  -h, --help                  display help for command
+  -l, --language <language>       language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.
+  -o, --output <output>           output folder. Default: <target>-codeql-results
+  -c, --command <command>         command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If
+                                  you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder
+  -t, --threads <number>          number of threads to use. Pass 0 to use one threads per core on the machine. Default: 1 (default: 1)
+  --query <query>                 CodeQL query to run. Default: <language>-security-extended.qls
+  --format <format>               output format. Default: sarif-latest (default: "sarif-latest")
+  --overwrite                     overwrite existing database.
+  --download                      download missing queries before analyzing.
+  --remove-remote-repository      remove the remote repository after cloning.
+  --db-output <dbOutput>          database folder path.
+  --remove-database               remove the CodeQL database after scanning.
+  --create-db-only                only create CodeQL database, do not scan.
+  --enable-file-logging           enable file logging.
+  --discord-webhook <webhookUrl>  discord web hook to send the result to.
+  --use-docker                    use docker to isolated run CodeQL.
+  -v, --verbose                   verbose output
+  -h, --help                      display help for command
 ```
 
 ## Using CodeQL Agent on VSCode
