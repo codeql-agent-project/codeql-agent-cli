@@ -40,6 +40,8 @@ program.command('scan')
     .option('--db-output <dbOutput>', 'database folder path. ')
     .option('--remove-database', 'remove the CodeQL database after scanning.')
     .option('--create-db-only', 'only create CodeQL database, do not scan.')
+    .option('--enable-file-logging', 'enable file logging.')
+    .option('--discord-webhook <webhookUrl>', 'discord web hook to send the result to.')
     .option('--use-docker', 'use docker to isolated run CodeQL.')
     .option('-v, --verbose', 'verbose output')
     .action(scan);

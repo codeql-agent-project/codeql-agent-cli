@@ -1,7 +1,7 @@
 const CONFIG = require('./config.json');
 
 module.exports = {
-    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, parseSarif
+    isCommandExist, isFolderExist, isSupportedLanguage, createIfNotExist, executeCommand, setupCreateDatabaseCommandArgs, getSourceLanguages, createCodeQLDatabase, normolizeString, isRemoteRepository, cloneRemoteRepository, removeFolder, setupScanCommandArgs, getDatabaseLanguages, parseSarif, castBugLevelToLogLevel
 }
 
 /**
@@ -331,4 +331,20 @@ async function parseSarif(sarifPath, logger) {
         return alert;
     });
     return alerts;
+}
+
+/**
+ * @desc cast bug level to log level
+ * @param {string} level - Bug level
+ * @return {string} - log level
+*/
+function castBugLevelToLogLevel(level) {
+    switch (level) {
+        case 'error':
+            return 'error';
+        case 'warning':
+            return 'warn';
+        default:
+            return 'error';
+    }
 }

@@ -38,7 +38,9 @@
     "linguist-js": "^2.5.4",
     "path": "^0.12.7",
     "which": "^3.0.0",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
+    "winston-transport-discord": "^1.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
