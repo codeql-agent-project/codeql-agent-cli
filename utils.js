@@ -220,7 +220,7 @@ async function setupScanCommandArgs(databaseFolderPath, options, logger) {
     args.push('database', 'analyze');
     args.push(`--format=${options.format ? options.format : CONFIG.default.format}`);
     args.push(`--output=${outputPath}`);
-    options.noDownload ? null : args.push(`--download`);
+    options.download ? args.push(`--download`) : null;
     options.threads ? args.push(`--threads=${options.threads}`) : null;
     options.verbose ? args.push(`--verbose`) : null;
 
