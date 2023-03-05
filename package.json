@@ -1,6 +1,6 @@
 {
   "name": "codeql-agent",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A CodeQL tool to automatically execute code scanning.",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "commander": "^10.0.0",
     "figlet": "^1.5.2",
     "linguist-js": "^2.5.4",
+    "p-limit": "^3.1.0",
     "path": "^0.12.7",
     "which": "^3.0.0",
     "winston": "^3.8.2",

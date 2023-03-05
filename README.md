@@ -19,7 +19,7 @@ CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semanti
 ## Features
 
 - Automated CodeQL from detect language, create database and scan.
-- Scan remote target (e.g. GitHub repository) or local target (e.g. source code folder).
+- Scan remote target (e.g. GitHub repository) or local target (e.g. source code folder). Support scan list of target.
 - Support running on Docker which prepackaged and precompiled CodeQL for running code scanning (*under development*).
 - Send results to Discord webhook.
 
@@ -65,23 +65,33 @@ codeql-agent scan -h
 This will display help for the tool. Here are all the switches of `scan` command supports.
 
 ```console
+   ____          _       ___  _          _                    _   
+  / ___|___   __| | ___ / _ \| |        / \   __ _  ___ _ __ | |_ 
+ | |   / _ \ / _` |/ _ \ | | | |       / _ \ / _` |/ _ \ '_ \| __|
+ | |__| (_) | (_| |  __/ |_| | |___   / ___ \ (_| |  __/ | | | |_ 
+  \____\___/ \__,_|\___|\__\_\_____| /_/   \_\__, |\___|_| |_|\__|
+                                             |___/                
+        Author: doublevkay - Version: 0.3.0
+
 Usage: codeql-agent scan [options] <target>
 
-scan a source code folder or remote repository (e.g. GitHub repository)
+scan a target. Target could be source code folder, remote repository (e.g. GitHub repository) or a list of target.
 
 Arguments:
-  target                          source code folder or remote repository.
+  target                          source code folder, remote repository or list of target.
 
   Examples:
         codeql-agent scan src/sammple
-        codeql-agent scan src/sammple --use-docker
+        codeql-agent scan targets.txt
         codeql-agent scan https://github.com/OWASP/NodeGoat
 
 Options:
-  -l, --language <language>       language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.
+  -l, --language <language>       language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the
+                                  language.
   -o, --output <output>           output folder. Default: <target>-codeql-results
-  -c, --command <command>         command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If
-                                  you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder
+  -c, --command <command>         command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies
+                                  the build commands needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system
+                                  automatically, using a built-in autobuilder
   -t, --threads <number>          number of threads to use. Pass 0 to use one threads per core on the machine. Default: 1 (default: 1)
   --query <query>                 CodeQL query to run. Default: <language>-security-extended.qls
   --format <format>               output format. Default: sarif-latest (default: "sarif-latest")

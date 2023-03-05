@@ -84,7 +84,7 @@ async function executeCommand(commandPath, commandArgs, description, logger) {
         result.stderr?.on('data', function (data) {
             if (data.includes('A fatal error occurred')) {
                 logger.error(`${description} failed: ${data} `);
-                process.exit(1);
+                return -1;
             }
             logger.verbose(`${description}: ${data.toString().trim()}`);
         });
@@ -103,7 +103,7 @@ async function executeCommand(commandPath, commandArgs, description, logger) {
         return exitCode;
     } catch (err) {
         logger.error(`${description} failed: ${err.stderr || err} `);
-        process.exit(1);
+        return -1;
     }
 }
 
@@ -271,13 +271,21 @@ async function cloneRemoteRepository(target, logger) {
  * @param {object} logger - A logger instance
  * @return {void}
 */
-async function removeFolder(folderPath, logger) {
+function removeFolder(folderPath, logger) {
     const fs = require('fs');
+    // check if exists
     try {
-        await fs.rmSync(folderPath, { recursive: true, force: true });
-    }
-    catch (error) {
-        logger.warning(`${error.message}`);
+        if (fs.existsSync(folderPath)) {
+            fs.rm(folderPath, { recursive: true, force: true, maxRetries: 10 }, (err) => {
+                if (err) {
+                    logger.warn(`Failed to remove folder ${folderPath}.`);
+                }
+            });
+        }
+
+
+    } catch (error) {
+        logger.warn(`Failed to remove folder ${folderPath}.`);
     }
 }
 

@@ -26,8 +26,8 @@ program
     .version(config.version);
 
 program.command('scan')
-    .description('scan a source code folder or remote repository (e.g. GitHub repository)')
-    .argument('<target>', 'source code folder or remote repository.\n\nExamples:\n\tcodeql-agent scan src/sammple\n\tcodeql-agent scan src/sammple --use-docker\n\tcodeql-agent scan https://github.com/OWASP/NodeGoat')
+    .description('scan a target. Target could be source code folder, remote repository (e.g. GitHub repository) or a list of target.')
+    .argument('<target>', 'source code folder, remote repository or list of target.\n\nExamples:\n\tcodeql-agent scan src/sammple\n\tcodeql-agent scan targets.txt\n\tcodeql-agent scan https://github.com/OWASP/NodeGoat')
     .option('-l, --language <language>', 'language of source code. Supported languages: go, java, cpp, csharp, cpp, javascript, ruby. Omitting this option to auto-detect the language.',)
     .option('-o, --output <output>', 'output folder. Default: <target>-codeql-results')
     .option('-c, --command <command>', 'command to create database for compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If you don\'t set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder')

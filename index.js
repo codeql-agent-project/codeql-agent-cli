@@ -3,6 +3,7 @@ const utils = require('./utils');
 const fs = require('fs');
 const config = require('./config');
 const path = require('path');
+const pLimit = require('p-limit');
 
 module.exports = {
     scan: scanAction
@@ -10,24 +11,37 @@ module.exports = {
 
 async function scanAction(sourceTarget, options) {
     if (options.verbose) { defaultLogger.setLevel('verbose') }
+    if (options.enableFileLogging) { defaultLogger.enableFileTransport() }
+    if (options.discordWebhook) { bugLogger.enableDiscordTransport(options.discordWebhook) }
+    options.enableFileLogging = undefined
+    options.discordWebhook = undefined
     if (options.useDocker) {
         await utils.isCommandExist('docker', defaultLogger);
         defaultLogger.error('Docker is not supported yet.');
         return;
     }
-    if (options.enableFileLogging) { defaultLogger.enableFileTransport() }
-    if (options.discordWebhook) { bugLogger.enableDiscordTransport(options.discordWebhook) }
     await utils.isCommandExist('codeql', defaultLogger);
-    // Create Database
-    var createDbOptions = { ...options };
-    createDbOptions.output = options.dbOutput;
+    if (fs.existsSync(sourceTarget) && fs.statSync(sourceTarget).isFile()) {
+        const targets = fs.readFileSync(sourceTarget, 'utf8').split(/\r?\n/);
+        const limit = pLimit(1);
+        return await Promise.all(targets.map((target) => limit(() => scanAction(target, options))));
+    }
     var isRemoteRepository = utils.isRemoteRepository(sourceTarget);
+    var sourceFolderPath = '';
     if (isRemoteRepository) {
         defaultLogger.info(`Cloning remote repository ${sourceTarget}`)
         sourceFolderPath = await utils.cloneRemoteRepository(sourceTarget, defaultLogger);
     } else sourceFolderPath = sourceTarget;
+    if (!fs.existsSync(sourceFolderPath)) {
+        defaultLogger.error(`Source folder \`${sourceFolderPath}\` does not exist.`);
+        return [];
+    }
     sourceFolderPath = fs.realpathSync(sourceFolderPath);
     defaultLogger.info(`Creating CodeQL database for ${sourceFolderPath}...`)
+
+    // Create Database
+    var createDbOptions = { ...options };
+    createDbOptions.output = options.dbOutput;
     var { args: createDbArgs, databasePath } = await utils.setupCreateDatabaseCommandArgs(sourceFolderPath, createDbOptions, defaultLogger);
     defaultLogger.verbose(`Options:`);
     for (const key in options) {
@@ -35,30 +49,23 @@ async function scanAction(sourceTarget, options) {
         defaultLogger.verbose(`[+] ${key}: ${element}`);
     }
     createDbExitCode = await utils.executeCommand('codeql', createDbArgs, 'Create CodeQL database', defaultLogger);
-    defaultLogger.info(`CodeQL database created at ${databasePath}.`)
-    if (isRemoteRepository && options.removeRemoteRepository) {
-        defaultLogger.info(`Removing remote repository ${sourceFolderPath}`)
-        await utils.removeFolder(sourceFolderPath, defaultLogger);
-    }
     if (options.createDbOnly) {
         return databasePath;
     }
+
     // Scan Database
     const outputFolderPath = options.output ? options.output : path.resolve(`${databasePath.endsWith('-codeql-database') ? databasePath.slice(0, -16) : databasePath}-codeql-results`);
     if (!fs.existsSync(outputFolderPath)) {
         fs.mkdirSync(outputFolderPath);
     }
     const languages = await utils.getDatabaseLanguages(databasePath, defaultLogger);
-    if (!languages) {
-        defaultLogger.error('Can not detect languages. Please specify the language using --language option');
-        return;
-    }
     for (const language of languages) {
         options.language = language;
         languageDatabasePath = path.resolve(`${databasePath}${path.sep}${language}`);
-        options.output = path.resolve(outputFolderPath, `${language}-codeql-result.sarif`)
+        const scanOption = { ...options };
+        scanOption.output = path.resolve(outputFolderPath, `${language}-codeql-result.sarif`)
         defaultLogger.info(`Scanning ${language} code in ${databasePath}...`)
-        var { args: scanArgs } = await utils.setupScanCommandArgs(languageDatabasePath, options, defaultLogger);
+        var { args: scanArgs } = await utils.setupScanCommandArgs(languageDatabasePath, scanOption, defaultLogger);
         await utils.executeCommand('codeql', scanArgs, 'Scan CodeQL database', defaultLogger);
     }
     defaultLogger.info(`CodeQL scan results saved at ${outputFolderPath}.`)
@@ -78,9 +85,14 @@ async function scanAction(sourceTarget, options) {
             meta: alert
         });
     }
+    if (isRemoteRepository && options.removeRemoteRepository) {
+        defaultLogger.verbose(`Removing remote repository ${sourceFolderPath}`)
+        utils.removeFolder(sourceFolderPath, defaultLogger);
+    }
     if (options.removeDatabase) {
-        defaultLogger.info(`Removing database folder ${databasePath}`)
-        await utils.removeFolder(databasePath, defaultLogger);
+        defaultLogger.verbose(`Removing database folder ${databasePath}`)
+        utils.removeFolder(databasePath, defaultLogger);
     }
     return alerts;
 }
+
