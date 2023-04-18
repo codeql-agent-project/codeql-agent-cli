@@ -1,6 +1,6 @@
 {
   "name": "codeql-agent",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A CodeQL tool to automatically execute code scanning.",
   "main": "index.js",
   "scripts": {
