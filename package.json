@@ -1,6 +1,6 @@
 {
   "name": "codeql-agent",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A CodeQL tool to automatically execute code scanning.",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "security"
   ],
   "author": "codeql-agent-project",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/codeql-agent-project/codeql-agent-cli/issues"
   },
