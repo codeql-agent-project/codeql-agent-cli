@@ -2,6 +2,8 @@
 
 [![NPM version][npm-version-image]][npm-url]
 [![NPM downloads][npm-downloads-image]][npm-downloads-url]
+[![OpenSSF
+Scorecard](https://api.securityscorecards.dev/projects/github.com/codeql-agent-project/codeql-agent-cli/badge)](https://api.securityscorecards.dev/projects/github.com/codeql-agent-project/codeql-agent-cli)
 [![MIT License][license-image]][license-url]
 
 CodeQL Agent CLI is a tool that automates the process of using CodeQL, a semantic code analysis engine, to execute code scanning. It makes the process of finding security vulnerabilities in code simple and efficient.
