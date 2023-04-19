@@ -71,7 +71,7 @@ This will display help for the tool. Here are all the switches of `scan` command
  | |__| (_) | (_| |  __/ |_| | |___   / ___ \ (_| |  __/ | | | |_ 
   \____\___/ \__,_|\___|\__\_\_____| /_/   \_\__, |\___|_| |_|\__|
                                              |___/                
-        Author: doublevkay - Version: 0.3.0
+        Author: doublevkay - Version: 0.3.3
 
 Usage: codeql-agent scan [options] <target>
 
